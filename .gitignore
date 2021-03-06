@@ -1,0 +1,6 @@
+client/node_modules
+client/constants.js
+static/
+server/node_modules
+server/.gitignore
+server/.git

@@ -1,0 +1,81 @@
+#url-input {
+    width: 20vw;
+    height: 3vh;
+    text-indent: 0.5vw;
+    border: 1px solid black;
+    background-color: #2c2f33;
+    caret-color: lightgray;
+    color: lightgray;
+}
+
+body {
+    background-color: #23272a;
+    font-family: 'Open Sans';
+}
+
+#embedded-player {
+    background-color: white;
+    display: inline-flex;
+    width: 90vw;
+    height: 90vh;
+    position: absolute;
+    left: 5vw;
+    top: 6vh;
+}
+
+#go-search {
+    width: 3vw;
+    height: 3vh;
+    line-height: 3vh;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+    background-color: rgb(34, 146, 34);
+    font-size: 1vw;
+    color: #23272a;
+}
+
+#input-container {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    top: 1vh;
+    left: 40vw;
+}
+
+#recalibrate-btn {
+    border: 1px solid black;
+    float: right;
+    top: 1vh;
+    position: absolute;
+    right: 2vw;
+    height: 3vh;
+    width: 5vw;
+    line-height: 3vh;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.85vw;
+    color: #23272a;
+    background-color: rgb(160, 74, 160);
+}
+
+#url-input:focus {
+    outline: none;
+}
+
+#calibration-status {
+    position: absolute;
+    left: 2vw;
+    border: 1px solid black;
+    width: 8vw;
+    height: 3vh;
+    line-height: 3vh;
+    text-align: center;
+    top: 1vh;
+    font-size: 1vw;
+    background-color: #ff0000;
+    border-radius: 5px;
+}

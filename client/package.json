@@ -1,0 +1,28 @@
+{
+    "name": "lounge",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "electron .",
+        "package": "asar pack lounge/resources/app lounge/resources/app.asar",
+        "dist-win": "electron-packager . Lounge --platform=win32",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "asar": "^3.0.3",
+        "electron": "^11.2.3",
+        "electron-packager": "^15.2.0"
+    },
+    "dependencies": {
+        "animate.css": "^4.1.1",
+        "animejs": "^3.2.1",
+        "jquery": "^3.6.0",
+        "node-fetch": "^2.6.1",
+        "socket.io-client": "^3.1.1",
+        "tachyons": "^4.12.0"
+    }
+}
