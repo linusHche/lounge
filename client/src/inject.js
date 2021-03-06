@@ -5,10 +5,15 @@ ipcRenderer.on('initialize', (e, arg) => {
     let videoPlayers = document.getElementsByTagName('video');
     let timer = 3;
     let interval = setInterval(() => {
-        if (videoPlayers.length > 0) {
-            clearInterval(interval);
-            continueInitialization();
-            ipcRenderer.sendToHost('calibration-success');
+        if (videoPlayers.length) {
+            for (let player of videoPlayers) {
+                if (player.readyState === 4 && !isNaN(player.duration)) {
+                    videoPlayer = player;
+                    clearInterval(interval);
+                    continueInitialization();
+                    ipcRenderer.sendToHost('calibration-success');
+                }
+            }
         } else if (timer) {
             videoPlayers = document.getElementsByTagName('video');
             timer--;
@@ -19,14 +24,10 @@ ipcRenderer.on('initialize', (e, arg) => {
 
     const continueInitialization = () => {
         let externalControl = false;
-        let videoPlayers = document.getElementsByTagName('video');
-        for (let player of videoPlayers) {
-            if (!isNaN(player.duration)) videoPlayer = player;
-        }
-        videoPlayer.style.border = '3px solid green';
-        setTimeout(() => {
-            videoPlayer.style.border = '';
-        }, 2000);
+        // videoPlayer.style.border = '3px solid green';
+        // setTimeout(() => {
+        //     videoPlayer.style.border = '';
+        // }, 2000);
         videoPlayer.onplay = () => {
             if (!externalControl) ipcRenderer.sendToHost('play-video');
             externalControl = false;
@@ -35,17 +36,17 @@ ipcRenderer.on('initialize', (e, arg) => {
             if (!externalControl) ipcRenderer.sendToHost('pause-video');
             externalControl = false;
         };
+        videoPlayer.addEventListener('waiting', () => {
+            console.log('iswaiting');
+        });
         let seeked = false;
         videoPlayer.onseeking = () => {
-            if (!seeked) {
-                seeked = true;
-                videoPlayer.pause();
-                if (!externalControl)
-                    ipcRenderer.sendToHost(
-                        'time-update',
-                        videoPlayer.currentTime.toString()
-                    );
-            }
+            if (!externalControl)
+                ipcRenderer.sendToHost(
+                    'time-update',
+                    videoPlayer.currentTime.toString()
+                );
+            // videoPlayer.pause();
             externalControl = false;
         };
 

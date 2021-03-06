@@ -5,7 +5,7 @@ let recalibrate = document.getElementById('recalibrate-btn');
 const webview = document.getElementById('embedded-player');
 const socket = io(host);
 let name = 'user' + Math.floor(Math.random() * 100 + 1);
-let room = 'person';
+let room = 'test';
 const webviewHelper = require('./src/webviewHelper.js')(socket, webview, room);
 const socketHelper = require('./src/socketHelper.js')(socket, webview);
 

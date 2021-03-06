@@ -42,7 +42,7 @@ io.on('connect', (socket) => {
     socket.on('pause-video-server', (room) => {
         verifyInRoom(socket, room);
         console.log('Video paused in Room: ' + room);
-        socket.broadcast.to(room).broadcast.emit('pause-video-client');
+        socket.broadcast.to(room).emit('pause-video-client');
     });
 
     socket.on('change-url', ({ room, url }) => {

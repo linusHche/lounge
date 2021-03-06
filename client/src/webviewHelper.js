@@ -7,7 +7,6 @@ const webviewHelper = (socket, webview, room) => {
                 break;
             case 'play-video':
                 socket.emit('play-video-server', room);
-                console.log('here');
                 break;
             case 'pause-video':
                 socket.emit('pause-video-server', room);
@@ -28,7 +27,7 @@ const webviewHelper = (socket, webview, room) => {
                 left: '3vw',
                 duration: 2000,
             });
-            calibrationStatus.text('calibrated');
+            calibrationStatus.text('Calibrated');
         }
     };
 
@@ -53,7 +52,6 @@ const webviewHelper = (socket, webview, room) => {
         calibrationStatus.text('Not Calibrated');
         urlInput.value = '';
 
-        $('#recalibrate-btn').trigger('click');
         socket.emit('change-url', { room, url });
         setTimeout(() => {
             webview.send('initialize');

@@ -11,18 +11,6 @@ const socketHelper = (socket, webview) => {
         webview.send('self-pause');
     });
 
-    socket.on('update-time', (time) => {
-        webview.send('self-update', time);
-    });
-
-    socket.on('play-video-client', () => {
-        webview.send('self-play');
-    });
-
-    socket.on('pause-video-client', () => {
-        webview.send('self-pause');
-    });
-
     socket.on('update-url', (url) => {
         webview
             .loadURL(url)
