@@ -1,57 +1,71 @@
-const socketHelper = (socket, webview) => {
-    socket.on('update-time', (time) => {
-        webview.send('self-update', time);
-    });
+import io from 'socket.io-client';
+import { host } from '../constants';
+import { inputUrl, changeCalibrationStatus } from './Actions/topBarActions';
 
-    socket.on('play-video-client', () => {
-        webview.send('self-play');
-    });
+class Socket {
+    constructor(room, store) {
+        this.room = room;
+        this.store = store;
+        this.socket = io(host);
+        this.init();
+    }
 
-    socket.on('pause-video-client', () => {
-        webview.send('self-pause');
-    });
+    init() {
+        const { socket, room, store } = this;
+        const {
+            addFunctionToMapping,
+            sendToBrowserView,
+            updateUrl: browserViewUpdateUrl,
+        } = window.electronapi;
+        addFunctionToMapping('time-update', (time) =>
+            socket.emit('time-update', { time, room })
+        );
+        addFunctionToMapping('play-video', () =>
+            socket.emit('play-video-server', room)
+        );
+        addFunctionToMapping('pause-video', () =>
+            socket.emit('pause-video-server', room)
+        );
 
-    socket.on('update-url', (url) => {
-        webview
-            .loadURL(url)
-            .then(() => {
-                afterURLLoad();
-            })
-            .catch((e) => console.error(e));
-    });
-
-    const afterURLLoad = () => {
-        let calibrationStatus = $('#calibration-status');
-        anime({
-            targets: '#calibration-status',
-            width: '8vw',
-            backgroundColor: '#ff0000',
-            duration: 2000,
-            left: '2vw',
+        socket.on('update-time', (time) => {
+            sendToBrowserView('self-update', time);
         });
-        calibrationStatus.text('Not Calibrated');
-        urlInput.value = '';
-        setTimeout(() => {
-            webview.send('initialize');
-        }, 2000);
-    };
 
-    const retryJoinSocket = (name, room) => {
-        socket.on('provide-id', () => {
-            socket.emit('join', { name, room }, () => {});
+        socket.on('play-video-client', () => {
+            sendToBrowserView('self-play');
         });
-    };
 
-    const joinRoom = (name, room) => {
-        socket.emit('join', { name, room }, () => {});
-        retryJoinSocket(name, room);
-    };
+        socket.on('pause-video-client', () => {
+            sendToBrowserView('self-pause');
+        });
 
-    const findAllPeopleInRoom = () => {
-        socket.emit('');
-    };
-
-    return { joinRoom, findAllPeopleInRoom };
-};
-
-module.exports = socketHelper;
+        socket.on('update-url', (url) => {
+            console.log('here');
+            browserViewUpdateUrl('send-to-browserview', url).then((result) => {
+                if (result) {
+                    this.store.dispatch(
+                        changeCalibrationStatus('Not Calibrated')
+                    );
+                }
+            });
+        });
+    }
+    changeUrl(url) {
+        console.log(this.room);
+        this.socket.emit('change-url', { room: this.room, url });
+    }
+    retryJoinSocket(name, room) {
+        this.socket.on('provide-id', () => {
+            this.socket.emit('join', { name, room }, () => {});
+        });
+    }
+    joinRoom(name, room) {
+        this.socket.emit('join', { name, room }, () => {});
+        this.retryJoinSocket(name, room);
+    }
+}
+let socket = null;
+export default function (room, store) {
+    if (!socket) socket = new Socket(room, store);
+    return socket;
+}

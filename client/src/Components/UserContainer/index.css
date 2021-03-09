@@ -1,0 +1,36 @@
+#user-container {
+    color: white;
+    position: absolute;
+    left: 0vw;
+    top: 6vh;
+    width: 17vw;
+    height: 70vh;
+}
+
+.room-user {
+    text-indent: 1vh;
+    margin-top: 1vh;
+    background-color: #2c2f33;
+    border-right: 3px solid rgb(155, 68, 68);
+    height: 4vh;
+    border-radius: 2px;
+    line-height: 4vh;
+    justify-content: center;
+}
+
+.ready {
+    border-right: 5px solid rgb(38, 179, 38);
+}
+.not-ready {
+    border-right: 5px solid rgb(155, 68, 68);
+}
+
+.buffering-square-1,
+.buffering-square-2,
+.buffering-square-3 {
+    background-color: red;
+    width: 1vh;
+    margin-left: 1px;
+    margin-right: 1px;
+    height: 1vh;
+}

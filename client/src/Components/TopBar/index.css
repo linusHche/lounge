@@ -1,0 +1,36 @@
+#input-container {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    top: 1vh;
+    left: 40vw;
+}
+
+#url-input {
+    width: 20vw;
+    height: 3vh;
+    text-indent: 0.5vw;
+    border: 1px solid black;
+    background-color: #2c2f33;
+    caret-color: lightgray;
+    color: lightgray;
+}
+
+#url-input:focus {
+    outline: none;
+}
+
+#go-search {
+    width: 3vw;
+    height: 3vh;
+    line-height: 3vh;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+    background-color: rgb(34, 146, 34);
+    font-size: 1vw;
+    color: #23272a;
+}

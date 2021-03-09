@@ -8,11 +8,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 const server = http.createServer(app);
-const io = socketio(server, {
-    cors: {
-        origin: '*',
-    },
-});
+const io = socketio(server);
 
 io.on('connect', (socket) => {
     console.log('New connection');
@@ -46,6 +42,7 @@ io.on('connect', (socket) => {
     });
 
     socket.on('change-url', ({ room, url }) => {
+        console.log('l');
         socket.broadcast.to(room).emit('update-url', url);
     });
 
@@ -62,7 +59,7 @@ io.on('connect', (socket) => {
     };
 });
 
-app.use(cors());
+// app.use(cors());
 app.use(router);
 
 server.listen(PORT, () => console.log(`Server has started`));

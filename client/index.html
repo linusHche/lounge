@@ -1,33 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
+        <meta charset="utf-8" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="script-src 'self'"
+        />
+        <meta
+            http-equiv="X-Content-Security-Policy"
+            content="script-src 'self'"
+        />
         <title>Lounge</title>
-        <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
-        <link rel="stylesheet" href="node_modules/animate.css/animate.min.css">
-        <link rel="stylesheet" href="node_modules/tachyons/css/tachyons.min.css">
-        <link rel="stylesheet" href="src/index.css">
         <link
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
-        rel="stylesheet"/>
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
+            rel="stylesheet"
+        />
     </head>
-    <body>
-        <div id="input-container">
-            <input id="url-input" class="br-pill" placeholder="Enter Website"/>
-            <span id="go-search" class="br-pill grow">Go</span>
-        </div>
-        <div id='calibration-status'>Not Calibrated</div>
-        <div id="recalibrate-btn" class="br-pill grow">Recalibrate</div>
-        <webview
-            id="embedded-player"
-            src="https://linushche.github.io"
-            webpreferences="worldSafeExecuteJavaScript, contextIsolation, sandbox"
-            preload="src/inject.js"
-        ></webview>
-        <div id="right-side-panel"></div>
-        <script src="node_modules/animejs/lib/anime.min.js"></script>
-        <script src="node_modules/socket.io-client/dist/socket.io.min.js""></script>
-        <script src="src/main.js">
-        </script>
+    <body style="background-color: #23272a">
+        <div id="app"></div>
     </body>
 </html>
