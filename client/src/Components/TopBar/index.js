@@ -5,13 +5,17 @@ import { inputUrl, updateUrl } from '../../Actions/topBarActions';
 const TopBar = (props) => {
     return (
         <div>
-            <div id="calibration-status">{props.calibrationStatus}</div>
+            <div id="calibration-status">
+                {props.calibrated ? 'Calibrated' : 'Not Calibrated'}
+            </div>
             <div
-                onClick={window.electronapi.recalibrate}
-                id="recalibrate-btn"
+                onClick={() =>
+                    window.electronapi.sendToBrowserView('calibrate')
+                }
+                id="calibrate-btn"
                 className="br-pill grow"
             >
-                Recalibrate
+                Calibrate
             </div>
             <div id="input-container">
                 <input
@@ -38,6 +42,7 @@ const TopBar = (props) => {
 
 const mapStateToProps = (state) => ({
     ...state.topBar,
+    calibrated: state.room.mainUser.calibrated,
 });
 
 const mapDispatchToProps = (dispatch) => ({

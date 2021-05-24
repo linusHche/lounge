@@ -13,7 +13,7 @@ const initalize = () => {
                     clearInterval(interval);
                     continueInitialization(player);
                     ipcRenderer.invoke(sendFromBrowserView, {
-                        channel: 'handle-recalibration',
+                        channel: 'handle-calibration',
                         data: true,
                     });
                 }

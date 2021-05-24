@@ -19,16 +19,16 @@
 }
 
 .ready {
-    border-right: 5px solid rgb(38, 179, 38);
+    border-right: 5px solid rgb(101, 238, 101);
 }
 .not-ready {
-    border-right: 5px solid rgb(155, 68, 68);
+    border-right: 5px solid rgb(253, 5, 5);
 }
 
 .buffering-square-1,
 .buffering-square-2,
 .buffering-square-3 {
-    background-color: red;
+    background-color: rgb(216, 216, 216);
     width: 1vh;
     margin-left: 1px;
     margin-right: 1px;

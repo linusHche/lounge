@@ -1,14 +1,13 @@
 import Socket from '../socketHelper';
+import { changeCalibrationStatus } from './roomActions';
 
 export const INPUT_URL = 'INPUT_URL';
-export const CHANGE_CALIBRATION_STATUS = 'CHANGE_CALIBRATION_STATUS';
 export function inputUrl(url) {
     return {
         type: INPUT_URL,
         url,
     };
 }
-
 export function updateUrl() {
     return (dispatch, getState) => {
         const { url } = getState().topBar;
@@ -17,15 +16,8 @@ export function updateUrl() {
             .then((result) => {
                 Socket().changeUrl(url);
                 if (result) {
-                    dispatch(changeCalibrationStatus('Not Calibrated'));
+                    dispatch(changeCalibrationStatus(false));
                 }
             });
-    };
-}
-
-export function changeCalibrationStatus(calibrationStatus) {
-    return {
-        type: CHANGE_CALIBRATION_STATUS,
-        calibrationStatus,
     };
 }

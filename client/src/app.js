@@ -6,8 +6,10 @@ import 'tachyons';
 import './index.css';
 import configureStore from './store';
 import Socket from './socketHelper';
-import UserContainer from './Components/UserContainer';
-import { changeCalibrationStatus } from './Actions/topBarActions';
+import UsersContainer from './Components/UsersContainer';
+import { changeCalibrationStatus } from './Actions/roomActions';
+import { setUsername } from './Actions/roomActions';
+import 'animate.css';
 const store = configureStore();
 
 const App = () => {
@@ -15,16 +17,17 @@ const App = () => {
     let room = 'test';
     const [socket, setSocket] = useState(null);
     useEffect(() => {
-        window.electronapi.addFunctionToMapping('handle-recalibration', () =>
-            store.dispatch(changeCalibrationStatus('Calibrated'))
+        store.dispatch(setUsername(name));
+        window.electronapi.addFunctionToMapping('handle-calibration', () =>
+            store.dispatch(changeCalibrationStatus(true))
         );
-        setSocket(Socket(room, store).joinRoom(name, room));
+        setSocket(Socket(room, store).joinRoom(room));
     }, []);
 
     return (
         <Provider store={store}>
             <div>
-                <UserContainer />
+                <UsersContainer />
                 <TopBar />
                 <Viewer />
             </div>

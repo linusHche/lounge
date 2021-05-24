@@ -22,6 +22,11 @@ function createWindow() {
     win.on('leave-html-full-screen', () => {
         win.webContents.send('exit-fullscreen');
     });
+    win.on('close', (e) => {
+        // e.preventDefault();
+        win.webContents.send('send-from-main', { channel: 'closing-window' });
+        // app.quit();
+    });
 }
 
 app.whenReady().then(createWindow);
@@ -80,7 +85,7 @@ ipcMain.handle('update-url', async (e, arg) => {
 ipcMain.handle('send-to-browserview', async (e, arg) => {
     const { channel, data } = arg;
     switch (channel) {
-        case 'recalibrate':
+        case 'calibrate':
             view.webContents.send('initalize-browserview');
             break;
         case 'update-url':
