@@ -58,17 +58,10 @@ func (rc *RoomController) GetRoomInfo(ctx echo.Context) error {
 	return nil
 }
 
-func (rc *RoomController) RemoveUserFromRoom(ctx echo.Context) error {
-	fmt.Println("here")
-	var u User
+func (rc *RoomController) RemoveUserFromRoom(username string) error {
 	filter := bson.D{{"name", "main"}}
 
-	if err := ctx.Bind(&u); err != nil {
-		fmt.Println(err)
-		return err
-	}
-	fmt.Println(u.Username)
-	changes := bson.M{"$pull": bson.M{"users": bson.M{"username": u.Username}}}
+	changes := bson.M{"$pull": bson.M{"users": bson.M{"username": username}}}
 	_, err := rc.db.UpdateOne(context.Background(), filter, changes)
 	if err != nil {
 		fmt.Println(err)
@@ -95,7 +88,7 @@ func (rc *RoomController) UpdateRoomURL(url string) {
 	rc.db.UpdateOne(context.Background(), filter, bson.M{"$set": bson.M{"url": url}})
 }
 
-func (rc *RoomController) UpdateUserInRoomAndRetriveRoomState(user User) *Room {
+func (rc *RoomController) UpdateUserInRoomAndRetrieveRoomState(user User) Room {
 	filter := bson.M{"name": "main", "users.username": user.Username}
 	changes := bson.M{"$set": bson.M{"users.$": user}}
 	var rd options.ReturnDocument = options.After
@@ -104,5 +97,5 @@ func (rc *RoomController) UpdateUserInRoomAndRetriveRoomState(user User) *Room {
 	}
 	var r Room
 	rc.db.FindOneAndUpdate(context.Background(), filter, changes, &opt).Decode(&r)
-	return nil
+	return r
 }

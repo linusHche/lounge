@@ -18,6 +18,15 @@ class Socket {
             sendToBrowserView,
             updateUrl: browserViewUpdateUrl,
         } = window.electronapi;
+        let user = this.store.getState().room.mainUser;
+
+        let interval = setInterval(() => {
+            if (this.socket.readyState == this.socket.OPEN) {
+                this.sendValue('register-user', user.username);
+                clearInterval(interval);
+            }
+        }, 1000);
+
         addFunctionToMapping(
             'time-update',
             (time) => sendValue.call(this, 'time-update', time)
@@ -30,24 +39,12 @@ class Socket {
         );
         addFunctionToMapping(
             'pause-video',
-            () => send.call(this, 'pause-video')
+            () => {
+                send.call(this, 'pause-video')
+            }
             // socket.emit('pause-video-server', room)
         );
 
-        addFunctionToMapping('closing-window', () => {
-            fetch(host.httpURL + '/room/removeuser', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(user)
-            })
-            socket.close();
-            // socket.disconnect();
-        });
-
-        let user = this.store.getState().room.mainUser;
-        console.log(user);
         fetch(host.httpURL + '/room/adduser', {
             method: 'PUT',
             headers: {
@@ -61,7 +58,6 @@ class Socket {
 
         socket.onmessage = function (e) {
             const message = JSON.parse(e.data);
-            console.log(message);
             switch (message.Event) {
                 case 'time-update':
                     sendToBrowserView('self-update', message.Value);
@@ -82,36 +78,14 @@ class Socket {
                         }
                     });
                 case 'update-room-state':
+                    let roomState = JSON.parse(message.Value);
+                    store.dispatch(updateRoomState(roomState));
                     break;
             }
         };
-        // socket.on('update-time', (time) => {
-        //     sendToBrowserView('self-update', time);
-        // });
-
-        // socket.on('play-video-client', () => {
-        //     sendToBrowserView('self-play');
-        // });
-
-        // socket.on('pause-video-client', () => {
-        //     sendToBrowserView('self-pause');
-        // });
-
-        // socket.on('update-url', (url) => {
-        //     browserViewUpdateUrl('send-to-browserview', url).then((result) => {
-        //         if (result) {
-        //             this.store.dispatch(changeCalibrationStatus(false));
-        //         }
-        //     });
-        // });
-
-        // socket.on('update-room-state', (roomState) => {
-        //     store.dispatch(updateRoomState(roomState));
-        // });
     }
     changeUrl(url) {
         this.sendValue('change-url', url);
-        // this.socket.emit('change-url', { room: this.room, url });
     }
     retryJoinSocket(user, room) {
         const { socket, store } = this;

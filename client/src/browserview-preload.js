@@ -30,26 +30,36 @@ const initalize = () => {
 const continueInitialization = (videoPlayer) => {
     let externalControl = false;
     videoPlayer.onplay = () => {
-        if (!externalControl)
+        if (!externalControl) {
             ipcRenderer.invoke(sendFromBrowserView, { channel: 'play-video' });
+        }
         externalControl = false;
     };
     videoPlayer.onpause = () => {
-        if (!externalControl)
+        if (!externalControl) {
             ipcRenderer.invoke(sendFromBrowserView, { channel: 'pause-video' });
+        }
         externalControl = false;
     };
     videoPlayer.addEventListener('waiting', () => {
         console.log('iswaiting');
     });
     let seeked = false;
+    let count = 1;
     videoPlayer.onseeking = () => {
-        if (!externalControl)
+        if (!externalControl) {
+            if (count > 10) {
+                return;
+            }
+            count++;
+            setTimeout(() => {
+                count = 0;
+            }, 500);
             ipcRenderer.invoke(sendFromBrowserView, {
                 channel: 'time-update',
                 data: videoPlayer.currentTime.toString(),
             });
-        // videoPlayer.pause();
+        }
         externalControl = false;
     };
 
@@ -62,7 +72,7 @@ const continueInitialization = (videoPlayer) => {
                 break;
             case 'self-pause':
                 externalControl = true;
-                videoPlayer.pause();
+                if (!seeked) videoPlayer.pause();
                 break;
             case 'self-update':
                 externalControl = true;
