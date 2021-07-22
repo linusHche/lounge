@@ -99,3 +99,10 @@ func (rc *RoomController) UpdateUserInRoomAndRetrieveRoomState(user User) Room {
 	rc.db.FindOneAndUpdate(context.Background(), filter, changes, &opt).Decode(&r)
 	return r
 }
+
+func (rc *RoomController) RetrieveRoomStateByRoomName(roomName string) Room {
+	filter := bson.M{"name": roomName}
+	var r Room
+	rc.db.FindOne(context.Background(), filter).Decode(&r)
+	return r
+}

@@ -89,10 +89,14 @@ func main() {
 
 }
 
-func (user *User) handleEvents(m msg) {
+func (user *User) handleEvents(m *msg) {
 	switch m.Event {
 	case "register-user":
 		user.room.users[user] = m.Value
+		m.Event = "update-room-state"
+		r := roomController.RetrieveRoomStateByRoomName("main")
+		out, _ := json.Marshal(r)
+		m.Value = string(out)
 	case "time-update":
 		roomController.UpdateRoomTime(m.Value)
 	case "play-video":
@@ -122,7 +126,7 @@ func (user *User) handleCommunicationStream() {
 			out, _ := json.Marshal(r)
 			m.Value = string(out)
 		}
-		user.handleEvents(m)
+		user.handleEvents(&m)
 
 		if err != nil {
 			log.Println(err)

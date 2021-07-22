@@ -28,25 +28,30 @@ const initalize = () => {
 };
 
 const continueInitialization = (videoPlayer) => {
+    videoPlayer.autoplay = false;
     let externalControl = false;
-    videoPlayer.onplay = () => {
-        if (!externalControl) {
+    let seeking = false;
+    videoPlayer.addEventListener('play', () => {
+        console.log(seeking + ' play')
+        if (!externalControl && !seeking) {
             ipcRenderer.invoke(sendFromBrowserView, { channel: 'play-video' });
         }
         externalControl = false;
-    };
-    videoPlayer.onpause = () => {
-        if (!externalControl) {
+    })
+    videoPlayer.addEventListener('pause', () => {
+        console.log(seeking + ' pause')
+        if (!externalControl && seeking) {
+            console.log('test');
             ipcRenderer.invoke(sendFromBrowserView, { channel: 'pause-video' });
         }
         externalControl = false;
-    };
+    })
     videoPlayer.addEventListener('waiting', () => {
         console.log('iswaiting');
     });
-    let seeked = false;
     let count = 1;
-    videoPlayer.onseeking = () => {
+    videoPlayer.addEventListener('seeking', () => {
+        seeking = true;
         if (!externalControl) {
             if (count > 10) {
                 return;
@@ -61,18 +66,21 @@ const continueInitialization = (videoPlayer) => {
             });
         }
         externalControl = false;
-    };
+    });
+    videoPlayer.addEventListener('seeked', () => {
+        seeking = false;
+    })
 
     ipcRenderer.on('send-from-renderer', (e, arg) => {
         const { channel, data } = arg;
         switch (channel) {
             case 'self-play':
                 externalControl = true;
-                if (!seeked) videoPlayer.play();
+                if (!seeking) videoPlayer.play();
                 break;
             case 'self-pause':
                 externalControl = true;
-                if (!seeked) videoPlayer.pause();
+                if (!seeking) videoPlayer.pause();
                 break;
             case 'self-update':
                 externalControl = true;
