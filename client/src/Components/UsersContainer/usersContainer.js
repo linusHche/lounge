@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import './usersContainer.css';
 import Anime from 'animejs';
 import { connect } from 'react-redux';
 

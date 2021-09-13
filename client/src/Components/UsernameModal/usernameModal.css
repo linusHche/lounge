@@ -1,0 +1,33 @@
+.modal-container {
+    background-color: rgb(160, 74, 160);
+    width: 30vw;
+    height: 20vh;
+    left: 35vw;
+    top: 40vh;
+    position: absolute;
+    border: 1px solid black;
+}
+
+#username-input {
+    width: 20vw;
+    height: 5vh;
+    text-indent: 0.5vw;
+    border: 1px solid black;
+    background-color: #2c2f33;
+    caret-color: lightgray;
+    color: lightgray;
+    position: inherit;
+    bottom: 20%;
+    left: 5vw;
+}
+
+#username-input:focus {
+    outline: none;
+}
+
+#username-modal-title {
+    top: 2vw;
+    position: absolute;
+    left: 9.5vw;
+    font-size: 1.5vw;
+}

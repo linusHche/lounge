@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './viewer.css';
 
 export default function () {
     const viewer = useRef(null);

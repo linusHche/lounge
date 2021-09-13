@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import './topBar.css';
 import { connect } from 'react-redux';
 import { inputUrl, updateUrl } from '../../Actions/topBarActions';
 const TopBar = (props) => {

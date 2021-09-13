@@ -32,20 +32,19 @@ const continueInitialization = (videoPlayer) => {
     let externalControl = false;
     let seeking = false;
     videoPlayer.addEventListener('play', () => {
-        console.log(seeking + ' play')
-        if (!externalControl && !seeking) {
+        console.log(seeking + ' play');
+        if (!externalControl) {
             ipcRenderer.invoke(sendFromBrowserView, { channel: 'play-video' });
         }
         externalControl = false;
-    })
+    });
     videoPlayer.addEventListener('pause', () => {
-        console.log(seeking + ' pause')
-        if (!externalControl && seeking) {
-            console.log('test');
+        console.log(seeking + ' pause');
+        if (!externalControl) {
             ipcRenderer.invoke(sendFromBrowserView, { channel: 'pause-video' });
         }
         externalControl = false;
-    })
+    });
     videoPlayer.addEventListener('waiting', () => {
         console.log('iswaiting');
     });
@@ -69,18 +68,18 @@ const continueInitialization = (videoPlayer) => {
     });
     videoPlayer.addEventListener('seeked', () => {
         seeking = false;
-    })
+    });
 
     ipcRenderer.on('send-from-renderer', (e, arg) => {
         const { channel, data } = arg;
         switch (channel) {
             case 'self-play':
                 externalControl = true;
-                if (!seeking) videoPlayer.play();
+                videoPlayer.play();
                 break;
             case 'self-pause':
                 externalControl = true;
-                if (!seeking) videoPlayer.pause();
+                videoPlayer.pause();
                 break;
             case 'self-update':
                 externalControl = true;

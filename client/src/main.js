@@ -14,7 +14,7 @@ function createWindow() {
             enableRemoteModule: false,
         },
     });
-    // win.setMenu(null);
+    win.setMenu(null);
     win.loadFile('build/index.html');
     win.on('enter-html-full-screen', () => {
         win.webContents.send('enter-fullscreen');
